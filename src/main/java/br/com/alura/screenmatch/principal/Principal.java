@@ -7,11 +7,10 @@ import br.com.alura.screenmatch.model.Episodio;
 import br.com.alura.screenmatch.service.ConsumoAPI;
 import br.com.alura.screenmatch.service.ConverteDados;
 
+import javax.swing.text.html.Option;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Principal {
@@ -56,6 +55,8 @@ public class Principal {
                 .limit(5)
                 .forEach(System.out::println);*/
 
+
+
         // Episódios usando classe
         List<Episodio> episodios = dadosTemporadas.stream()
                 .flatMap(t -> t.episodios().stream()
@@ -65,8 +66,11 @@ public class Principal {
 
         episodios.forEach(System.out::println);
 
+
+
+
         // Manipulando datas
-        System.out.println("A partir de qual ano você deseja assistir à série?");
+        /*System.out.println("A partir de qual ano você deseja assistir à série?");
         var ano = s.nextInt();
         s.nextLine();
 
@@ -79,6 +83,36 @@ public class Principal {
                         "Temporada: " + e.getNumeroTemporada() +
                                 " Episódio: " +e.getNumero()+
                                     " Data de Lançamento: " + e.getDataLancamento().format(dtf)
-                ));
+                ));*/
+
+
+        // Utilizando peek para debuggar os streams
+        /*dadosEpisodios.stream()
+                .filter(e -> !e.avaliacao().equalsIgnoreCase("N/A"))
+                .peek(e -> System.out.println("Filtrando os episódios com avaliação != de N/A " + e))
+                .sorted(Comparator.comparing(DadosEpisodio::avaliacao).reversed())
+                .peek(e -> System.out.println("Ordenando episódios por avaliação DESCRESCENTE " + e))
+                .limit(10)
+                .peek(e -> System.out.println("Limitando os 10 primeiros " + e))
+                .map(e -> e.titulo().toUpperCase())
+                .peek(e -> System.out.println("Mapeando o título dos episódios " + e))
+                .forEach(System.out::println);*/
+
+
+
+        // Econtrando a primeira ocorrência de valores
+        System.out.println("Digite o nome do episódio para encontrar sua temporada: ");
+        var trechoTitulo = s.nextLine();
+        Optional<Episodio> episodioEncontrado = episodios.stream()
+                .filter(e -> e.getTitulo().toUpperCase().contains(trechoTitulo.toUpperCase()))
+                .findFirst();
+
+        if (episodioEncontrado.isPresent()) {
+            System.out.println("Episódio encontrado! \nTemporada: " + episodioEncontrado.get().getNumeroTemporada());
+        } else {
+            System.out.println("Episódio não encontrado!");
+        }
+
+
     }
 }
