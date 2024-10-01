@@ -101,7 +101,7 @@ public class Principal {
 
 
         // Econtrando a primeira ocorrência de valores
-        System.out.println("Digite o nome do episódio para encontrar sua temporada: ");
+        /*System.out.println("Digite o nome do episódio para encontrar sua temporada: ");
         var trechoTitulo = s.nextLine();
         Optional<Episodio> episodioEncontrado = episodios.stream()
                 .filter(e -> e.getTitulo().toUpperCase().contains(trechoTitulo.toUpperCase()))
@@ -111,7 +111,24 @@ public class Principal {
             System.out.println("Episódio encontrado! \nTemporada: " + episodioEncontrado.get().getNumeroTemporada());
         } else {
             System.out.println("Episódio não encontrado!");
-        }
+        }*/
+
+        // Determinando a média de avaliação das temporadas
+        Map<Integer, Double> mediaPorTemporada = episodios.stream()
+                .filter(e -> e.getAvaliacao() > 0)
+                .collect(Collectors.groupingBy(Episodio::getNumeroTemporada, Collectors.averagingDouble(Episodio::getAvaliacao)));
+        System.out.println(mediaPorTemporada);
+
+        //Obtendo estatísticas
+        DoubleSummaryStatistics est = episodios.stream()
+                .filter(e -> e.getAvaliacao() > 0)
+                .collect(Collectors.summarizingDouble(Episodio::getAvaliacao));
+        System.out.println(est);
+        System.out.println("Média de avaliação: " +est.getAverage());
+        System.out.println("Melhor episódio: " +est.getMax());
+        System.out.println("Pior episódio: " +est.getMin());
+        System.out.println("Quantidade: " +est.getCount());
+
 
 
     }
